@@ -13,5 +13,6 @@ public class TestaBanco {
 			contaDoPaulo.deposita(100);
 			
 			contaDoPaulo.titular = paulo;
+			contaDoPaulo.numero = 0001;
 		}
 }
