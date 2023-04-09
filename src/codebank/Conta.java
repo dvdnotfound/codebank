@@ -2,71 +2,72 @@ package codebank;
 
 public class Conta {
 
-	private double saldo;
-	private int agencia;
-	private int numero;
+	private int saldo;
+	private String agencia;
+	private String numero;
 	private Cliente titular;
 	private static int total;
 	
-	public Conta(int agencia, int numero) {
-		Conta.total++;
-		System.out.println("O total de contas é: " + total);
+	public Conta(String agencia, String numero) {
 		this.agencia = agencia;
 		this.numero = numero;
-		System.out.println("estou criando uma conta " + this.numero);
+		System.out.println("Parabéns, sua conta foi concluído com sucesso!");
+		System.out.println("Agencia: " + this.agencia + " Número: " + this.numero + "\n");
+		Conta.total++;
+		System.out.println("O total de contas neste banco é de: " + total + "\n");
 	}
 
 	void deposita(double valor) {
+		System.out.println(this.titular.nome +", sua conta possui R$" + valor);
 		this.saldo += valor;
 	}
 
-	public boolean saca(double valor) {
-		if (this.saldo >= valor) {
-			this.saldo -= valor;
-			return true;
+	public void saca(double valor) {
+	
+		if (this.saldo < valor) {
+			throw new SaldoInsuficienteException("Saldo: R$" + this.saldo + " Valor: R$" + valor);
 		}
+		
+		this.saldo -= valor;
 
-		else {
-			return false;
-		}
 	}
 
-	public boolean transfere(double valor, Conta destino) {
-		if (this.saldo >= valor) {
-			this.saldo -= valor;
-			destino.deposita(valor);
-			return true;
+	public void transfere(double valor, Conta destino) {
+		if (this.saldo < valor) {
+			throw new SaldoInsuficienteException("Operação não concluída, seu saldo atual de: R$" + this.saldo + " é insuficiente");
 		}
-		return false;
+		
+		this.saldo -= valor;
+		destino.saldo += valor;
+		
+		System.out.println("\n O valor de R$" + valor + " foi transferido para: " + destino.getTitular().nome + "\n");
 	}
 	
-	public double consulta() {
-		return this.saldo;
+	
+	public void consulta() {
+		try {
+		System.out.println(this.titular.nome + " seu saldo é: " + this.saldo);
+		
+			} catch (NullPointerException e){
+				String msg = e.getMessage();
+				System.out.println("Exception " + msg);
+				e.printStackTrace();
+				
+				System.out.println("Algum valor desse objeto está nulo");
+			}
+		
 	}
 
-	public double getSaldo() {
-		return saldo;
-	}
 
-	public void setSaldo(double saldo) {
-		this.saldo = saldo;
-	}
-
-	public int getAgencia() {
+	public String getAgencia() {
 		return agencia;
 	}
 
-	public void setAgencia(int agencia) {
-		this.agencia = agencia;
-	}
 
-	public int getNumero() {
+	public String getNumero() {
 		return numero;
 	}
 
-	public void setNumero(int numero) {
-		this.numero = numero;
-	}
 
 	public Cliente getTitular() {
 		return titular;
